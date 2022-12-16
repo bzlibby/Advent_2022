@@ -2269,22 +2269,28 @@ const testInput = `1000
 
 10000`
 
-function findMostCalories (input) {
-    const arrayInput = input.split(/\r?\n|\r/);
-    const simplifiedInput = [];
+function totalCalories(allSnacks) {
+    const arraySnacks = allSnacks.split(/\r?\n|\r/);
+    const summedSnacks = [];
     let thisElf = 0;
-    for (x = 0; x < arrayInput.length; x++) {
-        let currentSnack = arrayInput[x];
-        if (currentSnack === '') {
-            simplifiedInput.push(thisElf)
+    for (let x = 0; x <= arraySnacks.length; x++) {
+        let currentSnack = arraySnacks[x];
+        if (currentSnack === '' || x === arraySnacks.length) {
+            summedSnacks.push(thisElf)
             thisElf = 0;
         } else {
             thisElf += parseInt(currentSnack);
         }
     }
     
-    return Math.max(...simplifiedInput);
+    return summedSnacks.sort((a, b) => (b - a));
 }
 
-console.log(findMostCalories(testInput))
-console.log(findMostCalories(puzzleInput))
+const testSnacks = totalCalories(testInput);
+const puzzleSnacks = totalCalories(puzzleInput);
+
+/* part one */
+console.log(testSnacks[0], puzzleSnacks[0]);
+
+/* part two */
+console.log(testSnacks.slice(0, 3).reduce((a, b) => (a + b)), puzzleSnacks.slice(0, 3).reduce((a, b) => (a + b)))
