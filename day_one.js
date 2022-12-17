@@ -2274,7 +2274,7 @@ function totalCalories(allSnacks) {
     const summedSnacks = [];
     let thisElf = 0;
     for (let x = 0; x <= arraySnacks.length; x++) {
-        let currentSnack = arraySnacks[x];
+        const currentSnack = arraySnacks[x];
         if (currentSnack === '' || x === arraySnacks.length) {
             summedSnacks.push(thisElf)
             thisElf = 0;
