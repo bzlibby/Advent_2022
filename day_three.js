@@ -3,37 +3,98 @@ const abcPriority = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 ];
 
+function findItemPriority(item) {
+    let n = 0;
+    for (const priority of abcPriority) {
+        if (item === priority) {
+            n = abcPriority.indexOf(item);
+            break;
+        }
+    }
+    return (n + 1)
+}
+
+// * PART ONE * //
+
 function findDuplicateItem(rucksack) {
-    const itemLength = ((rucksack.length) / 2);
-    const compartment1 = rucksack.split('').slice(0, itemLength);
-    const compartment2 = rucksack.split('').slice(itemLength);
-    console.log(itemLength, compartment1, compartment2)
-    const duplicate = compartment1.filter((letter) => compartment2.includes(letter));
+    const x = (rucksack.length / 2);
+    if ((rucksack.length % 2) === 1) {
+        console.log(`this is very odd.`)
+    }
+    const leftCompartment = rucksack.slice(0, x);
+    const rightCompartment = rucksack.slice(x);
+    let duplicate = '';
+    for (const item of leftCompartment) {
+        if (rightCompartment.includes(item)) {
+            duplicate = item;
+            break;
+        }
+    }
     return duplicate;
 }
 
-function findItemPriority(items) {
-    const duplicateItem = findDuplicateItem(items)[0];
-    console.log(duplicateItem)
-    return (abcPriority.findIndex((letter) => letter === duplicateItem)+1);
+function findAllPriorities(allRucksacks) {
+    const splitRucksacks = allRucksacks.split('\n');
+    let totalPriority = 0;
+    for (const rucksack of splitRucksacks) {
+        const duplicate = findDuplicateItem(rucksack);
+        const priority = findItemPriority(duplicate);
+        // console.log(duplicate, priority)
+        totalPriority += priority;
+    }
+    return totalPriority;
 }
 
-/* function rucksackPriority(itemPriority) {
-    const allPriorities = findItemPriority(itemPriority)
-} */
+// * PART TWO * // 
+
+function findElfGroups(allElves) {
+    const splitElves = allElves.split('\n')
+    const elfGroups = [];
+    for (let i = 0; i < splitElves.length; ) {
+        elfGroups.push([splitElves[i], splitElves[i+1], splitElves[i+2]]);
+        i += 3;
+    }
+    // console.log(elfGroups)
+    return elfGroups;
+}
+
+function findCommonItem(group) { 
+    const elfOne = group[0];
+    const elfTwo = group[1];
+    const elfThree = group[2];
+    let commonItems = [];
+    for (const item of elfOne) {
+        if (elfTwo.includes(item)) {
+            commonItems.push(item)
+        }
+    }
+    // console.log(`items that elfOne and elfTwo both hold: ${commonItems}`);
+    let finalItem = commonItems.filter(item => elfThree.includes(item));
+    return finalItem;
+}
+
+function findGroupPriority(allRucksacks) {
+    const groupedElves = findElfGroups(allRucksacks);
+    let totalPriority = 0;
+    for (const group of groupedElves) {
+        const item = findCommonItem(group)[0];
+        const priority = findItemPriority(item);
+        // console.log(item, priority)
+        totalPriority += priority; 
+    }
+    return totalPriority;
+}
 
 const testInput = (`vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
-CrZsJsPPZsGzwwsLwLmpwMDw`).split('\n');
-console.log(testInput);
-console.log(findDuplicateItem(testInput[0]));
-console.log(findItemPriority(testInput));
+CrZsJsPPZsGzwwsLwLmpwMDw`);
+// console.log(findAllPriorities(testInput));
+console.log(findGroupPriority(testInput))
 
-
-/* const puzzleInput = `VdzVHmNpdVmBBCpmQLTNfTtMhMJnhFhTTf
+const puzzleInput = `VdzVHmNpdVmBBCpmQLTNfTtMhMJnhFhTTf
 FgqsZbqDDFqRrhhJnsnLMTfhJG
 bRRRPrRRwSwbDqgjvDZbRbQzpzmQVWCzzBdvQBFCzlWV
 GcDdRdvhRssRhGDdShCRtqWjlQzqWgqzNfNjfQWWjt
@@ -332,5 +393,6 @@ DWPhqhhDhvSGvWPzSzMBQBQVMMBBmvssvQvQ
 CDGbqCDbChSbWGrHcHRgbcVcfrLJ
 frlTLmtllbbbdpJS
 qFjhzjThjHTFGHTjqhhjMzBhVpVpdbBnSJQRpBnVVdbRRQJd
-vjWPWjWPPPWgwmfCrNvTvZ`
-console.log(findItemPriority(puzzleInput)); */
+vjWPWjWPPPWgwmfCrNvTvZ`;
+// console.log(findAllPriorities(puzzleInput));
+console.log(findGroupPriority(puzzleInput));
