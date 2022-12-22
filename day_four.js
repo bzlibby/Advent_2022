@@ -1009,7 +1009,7 @@ const puzzleInput = `57-93,9-57
 
 // * PART ONE * //
 
-function doTheseOverlap(assignments) {
+function doTheseCompletelyOverlap(assignments) {
     const firstStart = parseInt(assignments[0], 10);
     const firstEnd = parseInt(assignments[1], 10);
     const secondStart = parseInt(assignments[2], 10);
@@ -1028,16 +1028,47 @@ function splitUpAssignments(allAssignments) {
     return groupedSplit;
 }
 
-function findAllOverlap(unsplitAssignments) {
+function findFullOverlap(unsplitAssignments) {
     const groupedAssignments = splitUpAssignments(unsplitAssignments);
     let totalOverlap = 0;
     for (const group of groupedAssignments) {
-        if (doTheseOverlap(group)) {
+        if (doTheseCompletelyOverlap(group)) {
             totalOverlap ++;
         }
     }
     return totalOverlap;
 }
 
-console.log(findAllOverlap(testInput));
-console.log(findAllOverlap(puzzleInput));
+console.log(findFullOverlap(testInput));
+console.log(findFullOverlap(puzzleInput));
+
+// * PART TWO * //
+
+function doThesePartiallyOverlap(assignments) {
+    const firstStart = parseInt(assignments[0], 10);
+    const firstEnd = parseInt(assignments[1], 10);
+    const secondStart = parseInt(assignments[2], 10);
+    const secondEnd = parseInt(assignments[3], 10);
+    if (
+        ((firstStart >= secondStart) && (firstStart <= secondEnd)) ||
+        ((firstEnd >= secondStart) && (firstEnd <= secondEnd)) ||
+        ((secondStart >= firstStart) && (secondStart <= firstEnd)) ||
+        ((secondEnd >= firstStart) && (secondEnd <= firstEnd))
+    ) {
+        return true
+    }
+}
+
+function findAnyOverlap(unsplitAssignments) {
+    const groupedAssignments = splitUpAssignments(unsplitAssignments);
+    let totalOverlap = 0;
+    for (const group of groupedAssignments) {
+        if (doThesePartiallyOverlap(group)) {
+            totalOverlap ++;
+        }
+    }
+    return totalOverlap;
+}
+
+console.log(findAnyOverlap(testInput))
+console.log(findAnyOverlap(puzzleInput))
